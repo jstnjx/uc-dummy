@@ -1,0 +1,49 @@
+{
+  "driver_id": "uc_dummy_integration",
+  "version": "0.1.0",
+  "min_core_api": "0.68.0",
+  "name": {
+    "en": "Unfolded Circle Dummy Integration"
+  },
+  "icon": "uc:integration",
+  "description": {
+    "en": "A fully controllable dummy integration for testing setup, entity discovery, commands, state updates and reconfiguration."
+  },
+  "port": 9091,
+  "developer": {
+    "name": "jstnjx",
+    "email": "dev@example.invalid",
+    "url": "https://github.com/jstnjx/uc-dummy"
+  },
+  "home_page": "https://github.com/jstnjx/uc-dummy",
+  "setup_data_schema": {
+    "title": {
+      "en": "Dummy integration options"
+    },
+    "settings": [
+      {
+        "id": "simulate",
+        "label": {
+          "en": "Generate live dummy sensor updates"
+        },
+        "field": {
+          "checkbox": {
+            "value": true
+          }
+        }
+      },
+      {
+        "id": "include_sensors",
+        "label": {
+          "en": "Expose dummy sensors"
+        },
+        "field": {
+          "checkbox": {
+            "value": true
+          }
+        }
+      }
+    ]
+  },
+  "release_date": "2026-08-16"
+}

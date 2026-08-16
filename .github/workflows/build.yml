@@ -1,0 +1,97 @@
+name: Build & Release dummy integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate Python
+        run: python -m py_compile src/driver.py
+      - name: Validate metadata
+        run: python -m json.tool driver.json >/dev/null
+      - name: Validate build script
+        run: bash -n scripts/build-aarch64.sh
+
+  build-aarch64:
+    needs: validate
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build Remote package
+        run: bash ./scripts/build-aarch64.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uc-dummy-integration-aarch64
+          path: |
+            uc-intg-dummy-v*-aarch64.tar.gz
+            uc-intg-dummy-v*-aarch64.sha256
+
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(python3 -c 'import json; print(json.load(open("driver.json"))["version"])')"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Create release tag from main
+        id: release_tag
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            echo "Tag ${TAG} already exists; not moving an existing release tag."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "${TAG}" "${GITHUB_SHA}" -m "Release ${TAG}"
+            git push origin "${TAG}"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish release created from main
+        if: github.ref == 'refs/heads/main' && steps.release_tag.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          gh release create "${TAG}" \
+            --title "${TAG}" \
+            --generate-notes \
+            uc-intg-dummy-v*-aarch64.tar.gz \
+            uc-intg-dummy-v*-aarch64.sha256
+
+      - name: Publish externally pushed tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || \
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            uc-intg-dummy-v*-aarch64.tar.gz \
+            uc-intg-dummy-v*-aarch64.sha256

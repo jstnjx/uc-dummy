@@ -99,8 +99,8 @@ uc-intg-dummy-v0.1.0-aarch64.tar.gz
 uc-intg-dummy-v0.1.0-aarch64.sha256
 ```
 
-There is also a GitHub Actions workflow. On an ARM64 GitHub runner it builds the same archive; a `v*` tag additionally
-creates a GitHub release.
+There is also a GitHub Actions workflow. On an ARM64 GitHub runner it builds the same archive. For a new version on
+`main`, the workflow creates the matching `v<driver.json version>` tag and GitHub release without moving an existing tag.
 
 ## Useful environment variables
 

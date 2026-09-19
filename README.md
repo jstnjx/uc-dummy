@@ -63,7 +63,7 @@ $env:UC_CONFIG_HOME = "$PWD\config"
 python .\src\driver.py
 ```
 
-The default Integration API port is **9091**. Override it with `UC_INTEGRATION_HTTP_PORT` if required.
+The default Integration API port is **19091**. Override it with `UC_INTEGRATION_HTTP_PORT` if required.
 The `ucapi` library publishes `_uc-integration._tcp.local` via mDNS unless `UC_DISABLE_MDNS_PUBLISH=true` is set.
 
 ## Recommended Integration Manager test
@@ -95,8 +95,8 @@ Docker with ARM emulation/support:
 Output:
 
 ```text
-uc-intg-dummy-v0.1.0-aarch64.tar.gz
-uc-intg-dummy-v0.1.0-aarch64.sha256
+uc-intg-dummy-v0.1.1-aarch64.tar.gz
+uc-intg-dummy-v0.1.1-aarch64.sha256
 ```
 
 There is also a GitHub Actions workflow. On an ARM64 GitHub runner it builds the same archive. For a new version on
@@ -107,7 +107,7 @@ There is also a GitHub Actions workflow. On an ARM64 GitHub runner it builds the
 | Variable | Purpose |
 |---|---|
 | `UC_CONFIG_HOME` | Persistent config directory |
-| `UC_INTEGRATION_HTTP_PORT` | Override port 9091 |
+| `UC_INTEGRATION_HTTP_PORT` | Override port 19091 |
 | `UC_INTEGRATION_INTERFACE` | Bind/publish a specific interface |
 | `UC_DISABLE_MDNS_PUBLISH` | Disable mDNS publication |
 | `UC_DRIVER_PATH` | Explicit path to `driver.json` |

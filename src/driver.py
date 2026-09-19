@@ -280,7 +280,7 @@ def _build_entities() -> None:
         ),
         _set_device(_make_media_player()),
         _set_device(
-            ucapi.IREmitter(
+            uc_ir.IREmitter(
                 IR_ID,
                 f"{config.name} IR Emitter",
                 features=[uc_ir.Features.SEND_IR],
@@ -926,10 +926,11 @@ def _device_selection_page() -> ucapi.RequestUserInput:
         title={"en": "Select dummy device"},
         settings=[
             {
+                "id": "device.info",
                 "label": {
                     "en": "This integration intentionally exposes one virtual device. No network scan is required."
                 },
-                "field": {"label": {"value": "UC Dummy Device"}},
+                "field": {"label": {"value": {"en": "UC Dummy Device"}}},
             },
             {
                 "id": "device.id",
@@ -986,7 +987,7 @@ def _device_options_page() -> ucapi.RequestUserInput:
                         "min": 1,
                         "max": 60,
                         "steps": 1,
-                        "unit": "s",
+                        "unit": {"en": "s"},
                     }
                 },
             },

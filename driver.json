@@ -1,6 +1,6 @@
 {
   "driver_id": "uc_dummy_integration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "min_core_api": "0.68.0",
   "name": {
     "en": "Unfolded Circle Dummy Integration"
@@ -9,7 +9,7 @@
   "description": {
     "en": "A fully controllable dummy integration for testing setup, entity discovery, commands, state updates and reconfiguration."
   },
-  "port": 9091,
+  "port": 19091,
   "developer": {
     "name": "jstnjx",
     "email": "dev@example.invalid",
@@ -45,5 +45,5 @@
       }
     ]
   },
-  "release_date": "2026-08-16"
+  "release_date": "2026-09-19"
 }
